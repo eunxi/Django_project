@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block con %}
+    <div class="container mb-5 mt-5">
+        <form method="post">
+            {% csrf_token %}
+            <h2><b>번역해조</b>😎</h2>
+            <div class="row mt-5 text-center">        
+            <div class="col-lg-5">
+                <textarea class="form-control" name="before" placeholder="번역할 문장 적기" style="height: 300px;">{{bef}}</textarea>
+            </div>
+            <div class="col-lg-2" style="margin: auto;">
+                <select class="form-select" name="from" multiple aria-label="multiple select example">
+                    <option value="ko" {% if f == 'ko' or not f %}selected{% endif %}>Korea</option>
+                    <option value="en" {% if f == 'en' %}selected{% endif %}>English</option>
+                    <option value="ja" {% if f == 'ja' %}selected{% endif %}>Japanese</option>
+                    <option value="zh-cn" {% if f == 'zh-cn' %}selected{% endif %}>Chinese</option>
+                </select>
+                <button class="btn btn-outline-dark mt-3 mb-3">Trans</button>
+                <select class="form-select" name="to" multiple aria-label="multiple select example">
+                    <option value="ko" {% if t == 'ko' %}selected{% endif %}>Korea</option>
+                    <option value="en" {% if t == 'en' or not t %}selected{% endif %}>English</option>
+                    <option value="ja" {% if f == 'ja' %}selected{% endif %}>Japanese</option>
+                    <option value="zh-cn" {% if f == 'zh-cn' %}selected{% endif %}>Chinese</option>
+                </select>
+            </div>
+            <div class="col-lg-5">
+                <textarea class="form-control" name="after" placeholder="번역될 문장 나옴" style="height: 300px;">{{aft}}</textarea>
+            </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

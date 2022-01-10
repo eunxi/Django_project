@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block con %}
+    {% load mathfilters %}
+    <div class="container mt-5 mb-5">
+            <h1><b>{{ to.subject }}</b></h1>
+
+            <div class="row mt-5">
+                <div class="col-lg-8">
+                    <textarea class="form-control" rows="10" disabled>{{ to.content }}</textarea>
+                </div>
+                <div class="col-lg-4" style="margin: auto;">
+                    <div class="mb-2">
+                        <img src="{{ to.writer.getpic }}" width="100%">
+                    </div>
+                    <div style="font-size: 25px;">
+                        by <b>{{ to.writer.username }}</b>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-end mt-5">
+                <a href="{% url 'vote:index' %}"><button class="btn btn-outline-dark">Back</button></a>
+            </div>
+
+            <!-- 보기 넣어주기 -->
+            {% if user in to.voter.all %}
+                <div class="row mt-3">
+                {% for i in clist %}
+                    <div class="col-lg-4 text-center" style="font-weight: bold; font-size: 20px;">
+                        <div class="form-check">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                            {{ i.name }}
+                            </label>
+                        </div>
+                        <div class="mt-3">
+                            <img src="{{ i.pic.url }}" width="80%">
+                        </div>
+                        <div class="progress mt-3">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: {{ i.choicer.count|div:to.voter.count|mul:100|floatformat:2 }}%">{{ i.choicer.count|div:to.voter.count|mul:100|floatformat }}%</div>
+                        </div>
+                        <div class="mt-3">
+                            <textarea disabled class="form-control" rows=5 style="font-size: 15PX; font-weight: bold;">{{ i.comment }}</textarea>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+                <div class="text-end mt-5">
+                    <a href="{% url 'vote:cancel' to.id %}"><button class="btn btn-outline-danger">Cancel</button></a>
+                </div>
+            {% else %}
+            <form method="post" action="{% url 'vote:vote' to.id %}">
+                {% csrf_token %}
+                <div class="row mt-3 mb-5">
+                    {% for i in clist %}
+                        <div class="col-lg-4 text-center" style="font-weight: bold; font-size: 20px;">
+                            <div class="form-check">
+                                <input class="form-check-input" name="cho" type="radio" value="{{ i.id }}" id="flexRadioDefault1">
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                {{ i.name }}
+                                </label>
+                            </div>
+                            <div class="mt-3">
+                                <img src="{{ i.pic.url }}" width="80%">
+                            </div>
+                            <div class="mt-3">
+                                <textarea disabled class="form-control" rows=5 style="font-size: 15px; font-weight: bold;">{{ i.comment }}</textarea>
+                            </div>
+                        </div>
+                    </div> 
+                    {% endfor %}
+                <div class="text-end mt-5">
+                    <button class="btn btn-outline-secondary">Vote</button>
+                </div>
+            </form>
+            {% endif %}
+    </div>
+{% endblock %}

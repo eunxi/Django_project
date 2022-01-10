@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block con %}
+<form method="post" name="regist" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="container mt-5 mb-5" style="width: 80%;">
+        <h1 style="font-weight: bold;">Sign up</h1>
+            <div class="mb-3 mt-5">
+                <label class="form-label" style="font-weight: bold;">Username</label>
+                <input type="text" class="form-control" name="un" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label" style="font-weight: bold;">Password</label>
+                <input type="password" class="form-control" name="pw" id="exampleInputPassword1">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" style="font-weight: bold;">age</label>
+                <input type="number" class="form-control" name="age" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" style="font-weight: bold;">Comment</label>
+                <textarea class="form-control" name="comment"></textarea>
+            </div>
+            <div class="mb-3">
+                <input type="file" name="userpic" class="form-control" style="font-weight: bold;" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+            <div class="text-end">
+                <button type="button"   onclick="check()" class="btn btn-secondary" style="font-weight: bold;">Regist</button>
+            </div>
+        </form>
+    </div> 
+
+
+    <script>
+        function check(){
+            f = document.regist;
+            if (!f.un.value){
+                alert("id 입력해주세요!");
+            }else if (!f.pw.value){
+                alert("password 입력해주세요!");
+            }else{
+                f.submit();
+            }
+        }
+    </script>
+{% endblock %}

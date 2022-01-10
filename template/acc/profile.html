@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block con %}
+    <div class="container mt-5 mb-5">
+        <h1><b>Profile</b></h1>
+        <div class="text-center">
+            <img src="{{ user.getpic }}" class="rounded-circle" width="15%">
+        </div>
+    
+
+    <div class="mb-3 mt-5" style="width: 70%";>
+        <label class="form-label" style="font-weight: bold;">Username</label>
+        <input type="text" value="{{user.name}}" disabled class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3" style="width: 70%">
+        <label class="form-label" style="font-weight: bold;">Age</label>
+        <input type="text" value="{{user.age}}" disabled class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3" style="width: 70%";>
+        <label class="form-label" style="font-weight: bold;">Comment</label>
+        <textarea class="form-control" disabled>{{ user.comment }}</textarea>
+    </div>
+</div>
+
+    <div class="text-end">
+        <a href="{% url 'acc:update' %}"><button class="btn btn-outline-secondary">Update</button></a>
+        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Delete Account
+        </button>
+    </div>
+
+    <!-- 여기부터 모달 -->
+    <form method="post" action="{% url 'acc:delete' %}">
+        {% csrf_token %}
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <b>비밀번호 확인</b><input name="pw" type="password" class="form-control">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-outline-danger">Delete</button>
+            </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

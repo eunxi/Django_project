@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block con %}
+    <div class="container mt-5 mb-5" style="font-size: 20px; font-weight: bold; width: 80%;">
+        
+        <h1><b>Update</b></h1>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3 mt-5">
+                <label class="form-label">Subject</label>
+                <input type="text" name="sub" value="{{ bo.subject }}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Writer</label>
+                <input type="text" class="form-control" disabled value="{{ user.username }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Content</label>
+                <textarea class="form-control" name="con" style="height: 100px;">{{ bo.content }}</textarea>
+            </div>
+            <div class="text-end mt-3">
+            <button type="submit"  class="btn btn-outline-secondary" style="font-weight: bold;">Update</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block con %}
+    <div class="container mt-5 mb-5" style="width: 70%;">
+        <h1><b>{{ bo.subject }}</b></h1>
+
+        <!-- 좋아요 기능 -->
+        <div class="text-end">
+            {% if user in bo.likey.all %}
+                <a href="{% url 'board:unlikey' bo.id %}"><button class="btn btn-outline-secondary">💔Unlike💔</button></a>
+            {% else %}
+                <a href="{% url 'board:likey' bo.id %}"><button class="btn btn-outline-secondary">❤️Like❤️</button></a>
+            {% endif %}
+
+            <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                ⭐
+            </button>
+        </div>  
+
+        <div class="row mt-5">
+            <div class="col-lg-9">
+                <textarea class="form-control" disabled style="height: 200px;">{{ bo.content }}</textarea>
+            </div>
+            <div class="col-lg-3 text-center">
+                <img src="{{ bo.writer.getpic }}" width="50%">
+                <h5 class="mt-2">written by <b>{{ bo.writer.username }}</b> </h5>
+            </div>
+        </div>
+      
+        <div class="text-end mt-5">
+            {% if user == bo.writer %}
+            <a href="{% url 'board:update' bo.id %}"><button class="btn btn-outline-primary">Update</button></a>
+            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                Delete
+            </button>
+            {% else %}
+            {% endif %}
+            <a href="{% url 'board:index' %}"><button class="btn btn-outline-dark">Back</button></a>
+        </div>
+
+        <form method="post" action="{% url 'board:creply' bo.id %}">
+            {% csrf_token %}
+            <hr>
+                <h3><b>댓글 쓰기</b></h3>
+                <textarea class="form-control mt-3" name="com" placeholder="댓글을 작성해주세요."></textarea>
+                <div class="text-end mt-3">
+                    <a href="{% url 'board:detail' bo.id%}"><button class="btn btn-outline-primary">전송</button></a>
+                </div> 
+            <hr>
+        </form>
+
+        {% if rlist %}
+            {% for i in rlist %}
+                <div class="row">
+                    <div class="col-lg-3" style="margin:auto">
+                        <img src="{{ i.replyer.getpic }}" width="40%">
+                        <h5 class="mt-2">written by <b>{{ i.replyer.username }}</b> </h5>
+                    </div>
+                    <div class="col-lg-8" style="margin:auto">
+                        <textarea class="form-control" disabled>{{ i.comment }}</textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-1" style="margin:auto">
+                            <!-- request.user 에서 request 생략 가능하므로 user 만 써도 OK -->
+                            {% if user == i.replyer %}
+                                <a href="{% url 'board:dreply' bo.id i.id %}"><button class="btn btn-outline-danger">삭제</button></a>
+                            {%else%}
+                                <button class="btn btn-outline-primary">Up</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+        {% else %}
+            <h5>첫번째 댓글을 달아주세요😜</h5>
+        {% endif %}
+
+    </div>
+
+    <!--여기부터는 Delete MODAL-->
+    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Page</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"> 
+                    정말로 삭제하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a href="{% url 'board:delete' bo.id %}"><button class="btn btn-danger">Delete</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--여기부터는 Book MODAL-->
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="post" action="{% url 'book:create' %}">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add BookMark</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body"> 
+                        <!-- {{ request.path }} : 현재 요청중인 경로를 의미하기 때문에, 얘를 surl 로 가져가기 
+                        {{ bo.subject }} : 몇번째 글을 가져가는지를 의미하기 때문에, 얘를 sname 으로 가져가기-->
+                        <div class="text-end">
+                            <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                                <input type="checkbox" name='impo' class="btn-check" id="btncheck2" autocomplete="off">
+                                <label class="btn btn-outline-warning" for="btncheck2">🌟</label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Comment</label>
+                            <textarea class="form-control" name="com"></textarea>
+                        </div>
+                        <!-- 사용자한테 입력받지 않고, 자동으로 가져오기 위한 hidden 태그 // URL 에 value 값이 넘어가기 때문에 value 값 넣어주기-->
+                        <!-- 어떤 app에서 bookmark 가져오는지 알기위해 [게시판] {{ bo.subject }} 해줌 -->
+                        <input type="hidden" name="sname" value="[게시판] {{ bo.subject }}">
+                        <input type="hidden" name="surl" value="{{ request.path }}">
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-outline-primary">Add Book</button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

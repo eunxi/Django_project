@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block con %}
+    <div class="container mb-5 mt-5" style="font-size: 20px; font-weight: bold; width: 80%;">
+        <form method="post" name="regist">
+            {% csrf_token %}
+                <h1><b>Create BookMark</b></h1>
+
+                <!-- 북마크 버튼 기능 -->
+                <div class="text-end">
+                    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                        <input type="checkbox" name="impo" class="btn-check" id="btncheck1" autocomplete="off">
+                        <label class="btn btn-outline-warning" for="btncheck1">🌟</label>
+                    </div>
+                </div>
+                <!-- 사이트 추가 부분 -->
+                <div class="mb-3 mt-5">
+                    <label class="form-label">Site Name</label>
+                    <input type="text" name="sname" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3 mt-5">
+                    <label class="form-label">Site URL</label>
+                    <input type="url" name="surl" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Comment</label>
+                    <textarea class="form-control" name="com" style="height: 100px;"></textarea>
+                </div>
+                <div class="text-end mt-3">
+                    <button class="btn btn-outline-success" type="button" onclick="check()">Regist</button>
+                </div>
+        </form>
+    </div>
+
+    <script>
+        function check() {
+            f = document.regist;
+            if (!f.sname.value) {
+                alert("Site Name 입력해주세요.");
+            }else if (!f.surl.value) {
+                alert("Site URL 입력해주세요.");
+            }else {
+                f.submit();
+            }
+        }
+    </script>
+{% endblock %}

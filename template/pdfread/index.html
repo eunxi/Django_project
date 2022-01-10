@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block con %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="container mt-5 mb-5">
+        <h1><b>PDF Reader</b></h1>
+
+        <div class="mt-5">
+            <input type="file" name="pdf" class="form-control">
+        </div>
+        <div class="text-end mt-3">
+            <button class="btn btn-outline-secondary">Extract</button>
+        </div>
+        <textarea class="form-control mt-3" style="height: 500px; font-size: 20px;" disabled>{{ t }}</textarea>
+    </div>
+</form>
+{% endblock %}
