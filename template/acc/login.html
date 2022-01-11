@@ -12,10 +12,13 @@
             <label for="exampleInputPassword1" class="form-label" style="font-weight: bold;">Password</label>
             <input type="password" class="form-control" name="pw" placeholder="Enter your Password" id="exampleInputPassword1">
         </div>
-        {% load socialaccount %}
-        {% providers_media_js %}
-        <a href="{% provider_login_url 'google' %}"><button type="button" class="btn btn-primary btn-dark" style="background-color: gray; color: black; font-weight: bold;">Google Login</button></a>
-        <button type="submit" class="btn btn-primary btn-dark" style="background-color: gray; color: black; font-weight: bold;">Login</button>
+        <div class="text-end mt-4">
+            {% load socialaccount %}
+            {% providers_media_js %}
+            <a href="{% provider_login_url 'google' %}"><button type="button" class="btn btn-primary btn-dark" style="background-color: gray; color: black; font-weight: bold;">Google Login</button></a>
+            
+            <button type="submit" class="btn btn-primary btn-dark" style="background-color: gray; color: black; font-weight: bold;">Login</button>
+        </div>
+    </form>
 </div>
-</form>
 {% endblock %}
